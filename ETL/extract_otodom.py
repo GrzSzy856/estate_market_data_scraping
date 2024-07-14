@@ -230,13 +230,4 @@ class OtodomScraper:
         return otoDomData
 
 
-# %%
-x = OtodomScraper('uoyObqrI-E788tD-piIci')
-
-# %%
-x.get_all_urls(print_page_numbers=True)
-
-# %%
-data = x.scrap_data(print_page_numbers=True)
-
 

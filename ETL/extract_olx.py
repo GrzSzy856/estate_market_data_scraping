@@ -196,16 +196,4 @@ class OlxScraper:
         
         return olxData
 
-# %%
-x = OlxScraper()
-
-# %%
-x.get_all_urls(print_page_numbers=True)
-
-# %%
-dane = x.scrap_data(print_page_numbers=True)
-
-# %%
-
-
 
