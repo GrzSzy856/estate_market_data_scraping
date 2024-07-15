@@ -30,6 +30,7 @@ class OlxScraper:
 
     _base_url = 'https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/'
     _params = '/?page={f}&view=grid'
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
 
     def __init__(self):
         """Initializes the scraper."""
@@ -40,12 +41,12 @@ class OlxScraper:
             'Warszawa': [],
             'Wroclaw': []
         }
+        
 
     def check_page_exists(self, url):
         """Checks whether given page exists. (Only for internal purposes)"""
-
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-        response = requests.get(url, headers=headers, allow_redirects=True)
+        
+        response = requests.get(url, headers=OlxScraper.headers, allow_redirects=True)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
             if not soup.find('p', string='Sprawdź ogłoszenia w większej odległości:') and (response.url == url or re.search(r'page=(\d+)', url).group(1) == '1'):
@@ -76,7 +77,7 @@ class OlxScraper:
                 if print_page_numbers:
                     print(f"{city_name}: Page {page_number} exists.")
 
-                response = requests.get(full_url, headers=headers, allow_redirects=True)
+                response = requests.get(full_url, headers=OlxScraper.headers, allow_redirects=True)
                 soup = BeautifulSoup(response.content, "html.parser")
                 a_elements = soup.find_all('a', {"class": "css-z3gu2d"})
 
@@ -101,7 +102,7 @@ class OlxScraper:
         
         """
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=OlxScraper.headers)
         soup = BeautifulSoup(response.content, "html.parser")
         soup_str = str(soup)
 
@@ -197,3 +198,5 @@ class OlxScraper:
         return olxData
 
 
+
+# %%

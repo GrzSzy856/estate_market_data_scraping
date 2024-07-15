@@ -38,6 +38,7 @@ class OtodomScraper:
             'Warszawa': '/mazowieckie/warszawa/warszawa/warszawa',
             'Wrocław': '/dolnoslaskie/wroclaw/wroclaw/wroclaw'
     }
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     
     def __init__(self, key):
         """
@@ -65,8 +66,7 @@ class OtodomScraper:
     def check_page_exists(self, url):
         """Checks whether given page exists. (Only for internal purposes)"""
 
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=self.headers)
         if response.status_code == 200:
             json_content = BeautifulSoup(response.text, 'html.parser')
             if not json_content.find('h3', string='Nie znaleźliśmy żadnych ogłoszeń'):
@@ -76,7 +76,7 @@ class OtodomScraper:
     def get_individual_urls(self, city_name, main_url):
         """Scraps the url's of all the offer listings."""
 
-        response = requests.get(main_url, headers=headers)
+        response = requests.get(main_url, headers=self.headers)
         json_content = BeautifulSoup(response.content, "html.parser")
 
         hrefs = []
@@ -136,7 +136,7 @@ class OtodomScraper:
         otoDomData = pd.DataFrame()
         for city_name, offer_urls in self.cities_individual_urls.items():
             for i, offer_url in enumerate(offer_urls):
-                response = requests.get(offer_url, headers=headers)
+                response = requests.get(offer_url, headers=self.headers)
                 try:
                     json_content = json.loads(response.content)['pageProps']['ad']
                 except KeyError:
