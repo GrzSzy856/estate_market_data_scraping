@@ -139,27 +139,30 @@ class OtodomScraper:
                 response = requests.get(offer_url, headers=self.headers)
                 try:
                     json_content = json.loads(response.content)['pageProps']['ad']
-                except KeyError:
+                except:
                     print('No data has been found in the json file')
                     break
                 print(offer_url)
-
-                generalInformation = {
-                'id': json_content.get('id', None),
-                'source':'OtoDom',
-                'date': date.today().strftime('%Y-%m-%d'),
-                'city': city_name,
-                'market_type': json_content.get('market', None),
-                'create_date': json_content.get('createdAt', None),
-                'modify_date': json_content.get('modifiedAt', None),
-                'title': json_content.get('title', None),
-                'url': json_content.get('url', None),
-                'price': json_content.get('target', {}).get('Price', None),
-                'price_per_m': json_content.get('target', {}).get('Price_per_m', None),
-                'area': json_content.get('target', {}).get('Area', None),
-                'building_year': json_content.get('target', {}).get('Build_year', None),
-                'construction_status': json_content.get('target', {}).get('Construction_status', None)
-                }
+                try:
+                    generalInformation = {
+                    'id': json_content.get('id', None),
+                    'source':'OtoDom',
+                    'date': date.today().strftime('%Y-%m-%d'),
+                    'city': city_name,
+                    'market_type': json_content.get('market', None),
+                    'create_date': json_content.get('createdAt', None),
+                    'modify_date': json_content.get('modifiedAt', None),
+                    'title': json_content.get('title', None),
+                    'url': json_content.get('url', None),
+                    'price': json_content.get('target', {}).get('Price', None),
+                    'price_per_m': json_content.get('target', {}).get('Price_per_m', None),
+                    'area': json_content.get('target', {}).get('Area', None),
+                    'building_year': json_content.get('target', {}).get('Build_year', None),
+                    'construction_status': json_content.get('target', {}).get('Construction_status', None)
+                    }
+                except: 
+                    print('Cannot retrieve the data')
+                    break
 
 
                 topInformation = {}
