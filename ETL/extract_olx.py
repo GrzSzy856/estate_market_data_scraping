@@ -142,7 +142,7 @@ class OlxScraper:
                     json_content = self.get_json(offer_url)
                 except Exception as E:
                     print('No data has been found in the json file')
-                    break
+                    continue
                 
                 generalInformation = {
                 'id': json_content['id'],

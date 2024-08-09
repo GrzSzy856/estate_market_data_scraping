@@ -141,7 +141,7 @@ class OtodomScraper:
                     json_content = json.loads(response.content)['pageProps']['ad']
                 except:
                     print('No data has been found in the json file')
-                    break
+                    continue
                 print(offer_url)
                 try:
                     generalInformation = {
@@ -162,7 +162,7 @@ class OtodomScraper:
                     }
                 except: 
                     print('Cannot retrieve the data')
-                    break
+                    continue
 
 
                 topInformation = {}
