@@ -1,8 +1,14 @@
 from sqlalchemy import create_engine
 import pandas as pd
 
-def FactLoad(df):
-    server = 'DESKTOP-9BB8IGK'
+def FactLoad(df=None):
+    """
+    Function loading data to the database
+    """
+    if not df:
+        df = pd.read_csv(r'C:\code\Projekt Data Scraping\data\AllData.csv')
+
+    server = 'DESKTOP'
     database = 'Estate Market DWH'
     trusted_connection = 'yes'
     driver = 'ODBC Driver 17 for SQL Server'

@@ -1,6 +1,5 @@
 # %%
 import pandas as pd
-import scrapy
 import requests
 import os
 from bs4 import BeautifulSoup
@@ -40,12 +39,13 @@ class OtodomScraper:
     }
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
     
-    def __init__(self, key):
+    def __init__(self, key, output_path = False):
         """
         Initializes the scraper with a given key.
 
         Args:
-            key (str): The otodom url key that enables the data scraping.        
+            key (str): The otodom url key that enables the data scraping.
+            output_path (str): Path in which save the data.        
         """
 
         self.key = key
@@ -61,6 +61,7 @@ class OtodomScraper:
             'Warszawa': [],
             'Wrocław': []
         }
+        self.output_path = output_path
 
 
     def check_page_exists(self, url):
@@ -229,6 +230,9 @@ class OtodomScraper:
 
                 if print_page_numbers:
                     print(f"City: {city_name}, page number: {i} out of {len(offer_urls)}")
+
+        if self.output_path:
+            otoDomData.to_csv(self.output_path, sep=',', index=False)
         
         return otoDomData
 

@@ -1,6 +1,5 @@
 # %%
 import pandas as pd
-import scrapy
 import requests
 import os
 from bs4 import BeautifulSoup
@@ -32,8 +31,13 @@ class OlxScraper:
     _params = '/?page={f}&view=grid'
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
 
-    def __init__(self):
-        """Initializes the scraper."""
+    def __init__(self, output_path = False):
+        """Initializes the scraper.
+
+        Args:
+            output_path (str): Path in which save the data.  
+        
+        """
 
         self.cities_individual_urls = {
             'Katowice': [],
@@ -41,6 +45,7 @@ class OlxScraper:
             'Warszawa': [],
             'Wroclaw': []
         }
+        self.output_path = output_path
         
 
     def check_page_exists(self, url):
@@ -89,6 +94,7 @@ class OlxScraper:
 
                 page_number += 1
             self.cities_individual_urls[city_name].extend(hrefs)
+        print("URL collection completed:", self.cities_individual_urls)
 
     
     def get_json(self, url):
@@ -134,7 +140,7 @@ class OlxScraper:
         Returns:
             olxData (Data Frame): a table with data scraped from all the offer pages.
         """
-        
+        print("URLS:", self.cities_individual_urls)
         olxData = pd.DataFrame()
         for city_name, offer_urls in self.cities_individual_urls.items():
             for i, offer_url in enumerate(offer_urls):
@@ -194,7 +200,10 @@ class OlxScraper:
 
                 if print_page_numbers:
                     print(f"City: {city_name}, page number: {i} out of {len(offer_urls)}")
-        
+
+        if self.output_path:
+            olxData.to_csv(self.output_path, sep=',', index=False)
+
         return olxData
 
 

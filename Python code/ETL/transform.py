@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 
-def OlxTransform(df):
+def OlxTransform(df=None):
     """
     Function transforming data from olx website.
     """
+    if not df:
+        df = pd.read_csv(r'C:\code\Projekt Data Scraping\data\OLX\OLX_Data.csv', sep=',')
     
     df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
     df['create_date'] = pd.to_datetime(df['create_date'].str.split('T').str[0]).dt.strftime('%Y%m%d')
@@ -22,13 +24,16 @@ def OlxTransform(df):
     df['rent'] = None
     df['building_year'] = -1
 
+    df.to_csv(r'C:\code\Projekt Data Scraping\data\OLX\OLX_Data_Transformed.csv', sep=',', index=False)
     return df
 
 
-def OtoDomTransform(df):
+def OtoDomTransform(df=None):
     """
     Function transforming data from OtoDom website.
     """
+    if not df:
+        df = pd.read_csv(r'C:\code\Projekt Data Scraping\data\OTODOM\OtoDom_Data.csv', sep=',')
     
     df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
     df['create_date'] = pd.to_datetime(df['create_date'].str.split('T').str[0]).dt.strftime('%Y%m%d')
@@ -46,13 +51,19 @@ def OtoDomTransform(df):
     df['furniture'] = 'Unknown'
     df = df.drop(['building_material', 'media_types', 'security_types', 'windows_type', 'construction_status', 'outdoor', 'car'], axis=1)
 
+    df.to_csv(r'C:\code\Projekt Data Scraping\data\OTODOM\OtoDom_Data_Transformed.csv', sep=',', index=False)
     return df
 
 
-def JoinEstateData(df1, df2):
+def JoinEstateData(df1=None, df2=None):
     """
     Function joining and transforming both olx and otodom data,
     """
+    if not df1:
+        df1 = pd.read_csv(r'C:\code\Projekt Data Scraping\data\OLX\OLX_Data_Transformed.csv', sep=',')
+
+    if not df2:
+        df2 = pd.read_csv(r'C:\code\Projekt Data Scraping\data\OTODOM\OtoDom_Data_Transformed.csv', sep=',')
 
     AllData = pd.concat([df1, df2]).drop_duplicates()
     AllData['building_year'] = pd.to_numeric(AllData['building_year'], errors='coerce').fillna(-1).astype('Int64')
@@ -84,4 +95,5 @@ def JoinEstateData(df1, df2):
     AllData['area'] = AllData['area'].astype('float64')
     AllData['rent'] = AllData['rent'].str.replace(',', '.').str.replace('EUR', '').astype('float64')
 
+    AllData.to_csv(r'C:\code\Projekt Data Scraping\data\AllData.csv', sep=',', index=False)
     return AllData
