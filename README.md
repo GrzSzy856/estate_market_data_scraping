@@ -2,7 +2,7 @@
 
 Table of Contents
   1. [Introduction](#introduction)
-  2. [Features](#featues)
+  2. [Features](#features)
   3. [Technologies](#technologies)
 
 ## Introduction
@@ -22,5 +22,6 @@ This project aims to provide a comprehensive solution for monitoring and analyzi
 * Apache Airflow: DAG creation and task automation.
 * Power BI & DAX: Visualization and dashboard creation.
 * SQLServer: Database creation, and storage of the data.
+
 
   
